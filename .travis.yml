@@ -12,6 +12,6 @@ deploy:
   provider: cargo
   on:
     tags: true
-    condition: os = linux
+    condition: $TRAVIS_OS_NAME = linux
   token:
     secure: evrSeGDKTNUm12peKXn1OHx6AG3cQ85WRT9NvBhzIMYNCkXrTWLnp3luOA8dn5tKpzvZcg91Ev0aBSZWVk6oFxdR8NQiAiWuet+/bIWefDTMkamCeJUFXkUA11eXsJ5WciU35Upe4MED9Y5yeGALkwuEXYCRyeZZZc4rT4+c+2QuL4n1rfQZscrIHM8hqvILTRMLYkgGZFawzkScBumMZWpEevxPTwxvlfsh4pLi1Qp7xMdw0bO3xnNPB+dXMpWHvGIkcqPk+ZjgXLlASjAcFNjSoUvB6E+NtPbOqJLoVKFJDPnW/g6Slr40VC/F7fMonfAwz8gn3n0BiN6I9c3E00yCapq/+7VCLj4KqwLItIXoMNscEVbeyL7IKYjUwpw8ALS5ubiIVA3e6GCSbmqRkgDIkXXBgLuZ87kcsV7t+itmLAn1kANOYXSdCPt7Bzj43ACzqCEi7FksvjXuAyLNEKnEeqrda9a6mNM/uL+W/ioeGmmQzMDHoYtUBL9QYMCLtL0Gsc0yCvmskRmM3G9z6uHNYFPLwjyz4D2fpdnKod/Hf0L58/sRE1c28gYVC39xwm9DVz5OBtkAt4u0/VnJSuu/ATALigBMBfukqXXO5bgUHvvr4JpNQ/Vl8a6t9MgnkiCVufWPsv0I7rE23S83BpVZqjLpxXSmoRufv3syGIg=
