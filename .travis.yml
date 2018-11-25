@@ -1,7 +1,5 @@
 os:
 - linux
-- osx
-- windows
 language: rust
 cache: cargo
 script:
@@ -11,8 +9,8 @@ script:
 - cargo doc
 deploy:
   provider: cargo
-  token:
-    secure: hgjsIztvuatvz/JIXu2IuejF1z6gdRsNgWl0ejeiZQeE+adDs/OFHX+l3BqejUD0beZLMx1VXA3Lf8FxWfiV8znmj4ukktPEXSeLVBS0Oqm9AYmYozFszerOwhHcWxckwPfdnVsxBuM/1tNTP3koM+hS7uH7Sa9k5jTQc1uFgoyYX9gbFqO/WuMLDB1YmWyNuFkY/UgAnVsVjr9bV/Hjysghq3SG2uzL7x8/4d11ys2IWbZtQY2vQd2ssVNOce40ckXCIq3J2Pt1v7VfuNyzu2dtFqIsp3hDbLnL0qH8yPe3lk6ay+tZTuWPykC8Iva3w78Trxw8FXpVZBGz/gbm9rvt7lSGXzfwAqa2AyHGiGgQ7W/nY6ZXdVTCuyRGMObQXcx+0pOR+i63HMS+NeoOtPvIfvhWMnFEUzv/bOt9cv80IswdllyoTXRHqKophTdLg1tlViy52yVY0v4YCp7Ts0ihKalILaRPDBBzLUQzlk/E/j+arkKP2d7+jII2B22WBn4X8mMLLbdxtf5eq4nYgHbhMOHkAH3VEohzsmYGEiFWE1mj28Tg/2PieXmeEtgCYscReYQ8u/U+JXFYatImDUMLBW/+j2l2+/8N3EIjvoR99wVogWfevw1JrcjVvqszQE8sV4OY4IGeZlcUxliHJRD9nCBQDymLhARmR9WHk8E=
   on:
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"
+  token:
+    secure: "KfCsYhFgJpNwJB8dq7AlMMmiN5x62rFE2QTVh3rp8B87VdkwBpUpAl37RYDjRyyu/brrOroEUhRC5+lmBFYYQI/6wr01OZ6ik5iKxplX+/8tt2zgnPsYhFE2pTjMWd0EjGguZteD6MxhDguaWjyaVG+RTAo5axX3yZFlN6YXefR5lK7jB+yMJQscvu+rvPrVs/i12K8BjMkkhCDAerBglXaQsI91yRuBoRxMiieyLImRrgsQtLsp3QB4c5/VhA/IYMm0KuEuJtLmARWkpS6XPKeirle6yGuiWguPTkEU7KmJHZQzGl7F5zb8h9r1ZCwLIln98yMukaKncEt5UwVAFA026oClqmPhom2YMaFx75fujIs0s01kEZYM0V1RiN/tMANnC+c8NRv6+bGJOfAlqXNiMyv5rrQnDiEhH+Qx9tSnpdRsYI/KofvIr3jDwJpNvBpG4zR4tN6dlRMG/uie37iBfydUasYAQpaIJx5i04vwolU/V6rZvD/5seiG03v6AZYkfXF7UgfbzGa+0cR9WYO4/c/g+5MV6KPioxxhwO8Jpwjw+xow5htGmZjyil1dv9k8XVlXx0BeCyWl12OynDAB9Rh5KbJt6fVnK4lPvL7cT44CYKokYYptIkTNwidPONWS4EwYGWQ/eT1aTVdM/LFMQQmFaqYCcYcXxJ+xbjE="
