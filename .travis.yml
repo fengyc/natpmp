@@ -1,9 +1,11 @@
 language: rust
+rust:
+  - stable
 script:
-- cargo build --verbose --all
-- cargo test --verbose test::test_ffi
-- cargo test --verbose test::test_natpmp
-- cargo doc
+  - cargo build --verbose --all
+  - cargo test --verbose test::test_ffi
+  - cargo test --verbose test::test_natpmp
+  - cargo doc --verbose
 deploy:
   provider: cargo
   token:

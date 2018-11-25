@@ -1,6 +1,6 @@
 [package]
 name = "natpmp"
-version = "0.1.10"
+version = "0.1.11"
 authors = ["fengyingcai <fengyc.work@gmail.com>"]
 build = "build.rs"
 description = "A NAT-PMP (IETF RFC 6886) library in rust."
