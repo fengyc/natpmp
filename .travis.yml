@@ -10,7 +10,7 @@ script:
 - cargo doc
 stages:
   - name: deploy
-    if: NOT os = linux
+    if: os = linux
 deploy:
   provider: cargo
   on:
