@@ -1,17 +1,15 @@
 [package]
 name = "natpmp"
-version = "0.1.12"
+version = "0.1.13"
 authors = ["fengyingcai <fengyc.work@gmail.com>"]
-readme = "README.md"
-license = "MIT"
-keywords = ["natpmp", "rfc6886", "nat", "portmapping"]
-repository = "https://github.com/fengyc/natpmp"
+description = "NAT-PMP client library"
 homepage = "https://github.com/fengyc/natpmp"
+repository = "https://github.com/fengyc/natpmp"
 documentation = "https://docs.rs/natpmp/"
+readme = "README.md"
+keywords = ["natpmp", "rfc6886", "nat", "portmapping"]
+license = "MIT"
 build = "build.rs"
-description = """
-A NAT-PMP (IETF RFC 6886) library in rust.
-"""
 
 [badges]
 travis-ci = { repository = "fengyc/natpmp" }
