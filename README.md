@@ -3,9 +3,9 @@ natpmp
 
 [![Build Status](https://travis-ci.com/fengyc/natpmp.svg?branch=master)](https://travis-ci.com/fengyc/natpmp)
 
-NAT-PMP client library in rust, a rust implementation of the c library libnatpmp([https://github.com/miniupnp/libnatpmp]).
+NAT-PMP client library in rust, a rust implementation of the c library libnatpmp([https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp)).
 
-*Note*: `src/getgateway.h` and `src/getgateway.c` are from [https://github.com/miniupnp/libnatpmp] .
+*Note*: `src/getgateway.h` and `src/getgateway.c` are from [https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp) .
 
 Example
 -------
