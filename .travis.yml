@@ -4,7 +4,3 @@ script:
   - cargo test --verbose test::test_ffi
   - cargo test --verbose test::test_natpmp
   - cargo doc --verbose
-deploy:
-  provider: cargo
-  token:
-    secure: "qepsa679qgvfQLNGmZPtS3uEjlWCyL11fDHVhaLAUMkjxG5El/PraPKayYnyd+sUIa3F49Sk9aghbYOseptPtScbN/sYjq33xkcdMMozM8JKz/+Nz3KuRFyHvtMEdAxhyKziL6vPnx6LXMFg9uYW6Tlh7M19nX1OMeTNQ33TYf37+bo+lhf5RzM9RxPe58kgB3m5m2klYWTlggcKZkb2ELiEVqO/7moy8EsVC8DLoIKODOJzwU+l+rDhx5ABLtB4tzmM51Z6tW0eTceGr555dZ4kqEAXdHRrPzB59G8zXBuWG3gSQIBw5zxJQc+WBsWYm3DNCLqUmZXsh7/lKILQCbOPql2iNJhHODDo/sSL1diuijMVxY1juop+4AO30hxNNV9ITNmypVnJloy4CWSLg7cXBh70RdfuV4UU6vvtNxOzzeK6GyIS6wyKApy38VOXQ1xQU7H7J3xZYk1Tp3Yjeorak237J8ynQ3xZkZOzMBMkuoE19+j50fCZS3YfXTzFrly9r0EzSc+2ky1kHWQxom2uuPzlCsA95r0wS3RhlhtHh40fTG3Wiao9NQPjK+GtRhMK4h7zwxwgNHzpE81iCShrNKk24wLQ26el7g/CLlVbuaPR7VRm14/3Lv8exvZUfqAyrq2iNGTgzzsL6JpES64vrXhhYcFrfQFOwHeDkCY="
