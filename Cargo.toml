@@ -8,6 +8,7 @@ license = "MIT"
 keywords = ["natpmp", "rfc6886", "nat", "port mapping"]
 repository = "https://github.com/fengyc/libnatpmp"
 homepage = "https://github.com/fengyc/libnatpmp"
+documentation = "https://docs.rs/libnatpmp/"
 
 [build-dependencies]
 cc = "1.0"      # compile native c
