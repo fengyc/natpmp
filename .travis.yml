@@ -1,9 +1,15 @@
+os:
+  - linux
+  - osx
+  - windows
 language: rust
 script:
   - cargo build --verbose --all
   - cargo test --verbose test::test_ffi
   - cargo test --verbose test::test_natpmp
   - cargo doc --verbose
+  - cargo run --example udp_mapping --verbose
+  - cargo run --example tcp_mapping --verbose
 deploy:
   provider: cargo
   on:
