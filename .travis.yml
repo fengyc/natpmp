@@ -5,4 +5,5 @@ rust:
   - nightly
 script:
   - cargo build --verbose --all
-  - cargo test --verbose --all
+  - cargo test --verbose test::test_ffi
+  - cargo test --verbose test::test_natpmp
