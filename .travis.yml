@@ -3,7 +3,6 @@ os:
 - linux
 - osx
 language: rust
-cache: cargo
 script:
 - cargo build --verbose --all
 - cargo test --verbose test::test_ffi
