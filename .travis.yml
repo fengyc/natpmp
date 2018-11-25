@@ -8,12 +8,10 @@ script:
 - cargo test --verbose test::test_ffi
 - cargo test --verbose test::test_natpmp
 - cargo doc
-stages:
-- name: deploy
-  if: os = linux
 deploy:
   provider: cargo
   on:
     tags: true
+    condition: os = linux
   token:
     secure: JhMVRN2MGHjA55yyrMXkT1nu2uhJTVqCal9hNutSupeOIO4kcZXAI6o2RTDTgUd0W+hO2OodLhfI69+hJ4S+8noK3N/TY490kZqgeG/w5wfh0KFF3G+NWiBnJp5X2cZyj/Wd+fnGu5DnhDNBWG7y1hXocQ68vzAAGBna1qDDiWY6aXdy3eC7RY1Xg2A1dLtsg9NSpMltKVVqlnGboj4izs5kaalN/3bbxNQRqO9w5+w6HPxNMprST2AU5lSvmIPyQQN7UIukS0xGyXW8rhCiW655qATP+X3sqW97nY26KtNgDDznWKgDWms3RZc9Uz8tG8f2+JDh/aWHMW4C7DfRDBj2Bw+aIdyBysniq//Oiwa8AJ/gHSzzPRxA06lZimdsjUACWUur1HsJMLHiRtGjUrQlOFj5zB+K2+6WsPx3k0mJn0XWPkNTZZkZodb/S3hluNf2/H3aCSZB1nPCiX1osKB/6KCC4a64gQTB2i2hCfBaaGPHCgbYO7EWmki8aqEFPo/bFIwndh1q2PqnjNy55o/S8G2LQGuMbxQ4YuQTnE+bwxzxFHZTDEPcThpzdk4FJCTq+Y0YKvVgzhaeGiAoug7X6g1jzrAiHtazxUvPCwRaTxZtI4CzNpfedzMVnhurlHLMeKcwjS+rE8UTnhWQCRu0n23CHRzUmwA4ri9m1rA=
