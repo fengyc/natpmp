@@ -6,5 +6,8 @@ script:
   - cargo doc --verbose
 deploy:
   provider: cargo
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = linux
   token:
     secure: jGHtacangjMD++2wehiDki4Zwt+DouPv5aQTGAVZINAVrufLAuPMl3HQQvpLG9iu7bM2a3PYjkLXK5/Bd27Uex5TzkALtclddlJkuXkTi6sDK+nD0lNeWel46v03kE5CR5mw6WlYGCWR9F3976zxm9O7D9mYr/aLqEFMQn2l+aEtjpu1iH11UMduyK6S8N7OJfno7oWo1DSKPKN0IKPc/v63s9CpxLoYsVLh3VDgFO6yZj2aWB7pzKIpmHB45dyxXlTqTx0+sxbBs7iEtPCuOY8F7b8/iyhAeGxrx6zQniOTnLSOQxzfP0kQ3cN4Q1aFthJd54OcYSrgHc1FmJT0k9Sm1dacwQqWQEc3uFnHbkkJgsYNiOUy1mFOIwQ50OYkZfrsyxOTVLUFLalLRFQKpm9gfcMhIajSHBvCj8aedv2p4KYCHQ0q0kbuUbnXXEaB+6V6NDSlUKjM8xK9kPRal7TPQmjyZxSU7h78pvf3N7xZNoBo59lr54kv/jINZYhLIAMIpRvQo/g7s9DHIy4JT8fpNoGnkS/tS5TCAMgsJDrXWKnvU0Sd0hRvi623afJDzrGxSs0z/pwjhFRKq5L7rsQKiH1u7QV+qDyBcUdXbwi/hCc4qLVtRiRV+gy+eRmTqSLffrIYtg92ZtE657xel+QLkSEP/bg0ksNE0JX+aO0=
