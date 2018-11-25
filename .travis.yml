@@ -8,6 +8,9 @@ script:
 - cargo test --verbose test::test_ffi
 - cargo test --verbose test::test_natpmp
 - cargo doc
+stages:
+  - name: deploy
+    if: NOT os = linux
 deploy:
   provider: cargo
   on:

@@ -1,8 +1,7 @@
 //! # natpmp
 //!
 //! `natpmp` is a NAT-PMP [IETF RFC 6886](https://tools.ietf.org/html/rfc6886) client library in rust.
-//!
-//! This is a rust implementation of the c library [natpmp](https://github.com/miniupnp/natpmp).
+//! It is a rust implementation of the c library [natpmp](https://github.com/miniupnp/natpmp).
 
 use std::fmt;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4, UdpSocket};
@@ -27,7 +26,7 @@ pub type Result<T> = result::Result<T, Error>;
 ///
 /// # Examples
 /// ```
-/// use libnatpmp::*;
+/// use natpmp::*;
 ///
 /// let err = Error::NATPMP_ERR_CANNOTGETGATEWAY;
 /// println!("{}", err);
@@ -131,6 +130,11 @@ impl fmt::Display for Error {
 const NATPMP_MIN_WAIT: u64 = 250;
 const NATPMP_MAX_ATTEMPS: u32 = 9;
 
+// TODO: Any better way to link a windows library?
+#[cfg(windows)]
+#[link(name = "Iphlpapi")]
+extern "C" {}
+
 extern "C" {
     static RS_EWOULDBLOCK: i32;
     static RS_ECONNREFUSED: i32;
@@ -144,7 +148,7 @@ extern "C" {
 ///
 /// # Examples
 /// ```
-/// use libnatpmp::*;
+/// use natpmp::*;
 ///
 /// let r = get_default_gateway();
 /// assert_eq!(r.is_ok(), true);
@@ -249,13 +253,13 @@ pub enum Response {
 /// ```
 /// use std::thread;
 /// use std::time::Duration;
-/// use libnatpmp::*;
+/// use natpmp::*;
 ///
 /// # fn main() -> Result<()> {
-/// let mut natpmp = Natpmp::new()?;
-/// natpmp.send_port_mapping_request(Protocol::UDP, 4020, 4020, 30)?;
+/// let mut n = Natpmp::new()?;
+/// n.send_port_mapping_request(Protocol::UDP, 4020, 4020, 30)?;
 /// thread::sleep(Duration::from_millis(100));
-/// let response = natpmp.read_response_or_retry()?;
+/// let response = n.read_response_or_retry()?;
 ///  match response {
 ///      Response::UDP(ur) => {
 ///          assert_eq!(ur.private_port(), 4020);
@@ -285,10 +289,10 @@ impl Natpmp {
     ///
     /// # Examples
     /// ```
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
-    /// let natpmp = Natpmp::new();
-    /// assert_eq!(natpmp.is_ok(), true);
+    /// let n = Natpmp::new();
+    /// assert_eq!(n.is_ok(), true);
     /// ```
     pub fn new() -> Result<Natpmp> {
         let gateway = get_default_gateway()?;
@@ -306,9 +310,9 @@ impl Natpmp {
     /// ```
     /// use std::str::FromStr;
     /// use std::net::Ipv4Addr;
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
-    /// let natpmp = Natpmp::new_with("192.168.0.1".parse().unwrap()).unwrap();
+    /// let n = Natpmp::new_with("192.168.0.1".parse().unwrap()).unwrap();
     /// ```
     pub fn new_with(gateway: Ipv4Addr) -> Result<Natpmp> {
         let s: UdpSocket;
@@ -324,7 +328,7 @@ impl Natpmp {
         if s.connect(gateway_sockaddr).is_err() {
             return Err(Error::NATPMP_ERR_CONNECTERR);
         }
-        let natpmp = Natpmp {
+        let n = Natpmp {
             s,
             gateway,
             has_pending_request: false,
@@ -333,7 +337,7 @@ impl Natpmp {
             try_number: 0,
             retry_time: Instant::now(),
         };
-        Ok(natpmp)
+        Ok(n)
     }
 
     /// NAT-PMP gateway address.
@@ -341,12 +345,12 @@ impl Natpmp {
     /// # Examples
     /// ```
     /// use std::net::Ipv4Addr;
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
     /// # fn main() -> Result<()> {
     /// let gateway = Ipv4Addr::from([192, 168, 0, 1]);
-    /// let natpmp = Natpmp::new_with(gateway)?;
-    /// assert_eq!(natpmp.gateway(), &gateway);
+    /// let n = Natpmp::new_with(gateway)?;
+    /// assert_eq!(n.gateway(), &gateway);
     /// # Ok(())
     /// # }
     /// ```
@@ -383,13 +387,13 @@ impl Natpmp {
     /// # Examples
     /// ```
     /// use std::time::Duration;
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
     /// # fn main() -> Result<()> {
-    /// let mut natpmp = Natpmp::new()?;
-    /// natpmp.send_public_address_request()?;
+    /// let mut n = Natpmp::new()?;
+    /// n.send_public_address_request()?;
     /// // do something
-    /// let duration = natpmp.get_natpmp_request_timeout()?;
+    /// let duration = n.get_natpmp_request_timeout()?;
     /// if duration <= Duration::from_millis(10) {
     ///     // read response ...
     /// }
@@ -415,11 +419,11 @@ impl Natpmp {
     ///
     /// # Examples
     /// ```
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
     /// # fn main() -> Result<()> {
-    /// let mut natpmp = Natpmp::new()?;
-    /// natpmp.send_public_address_request()?;
+    /// let mut n = Natpmp::new()?;
+    /// n.send_public_address_request()?;
     /// // do something then read response
     /// # Ok(())
     /// # }
@@ -438,11 +442,11 @@ impl Natpmp {
     ///
     /// # Examples
     /// ```
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
     /// # fn main() -> Result<()> {
-    /// let mut natpmp = Natpmp::new()?;
-    /// natpmp.send_port_mapping_request(Protocol::UDP, 4020, 4020, 30)?;
+    /// let mut n = Natpmp::new()?;
+    /// n.send_port_mapping_request(Protocol::UDP, 4020, 4020, 30)?;
     /// // do something then read response
     /// # Ok(())
     /// # }
@@ -572,13 +576,13 @@ impl Natpmp {
     /// ```
     /// use std::thread;
     /// use std::time::Duration;
-    /// use libnatpmp::*;
+    /// use natpmp::*;
     ///
     /// # fn main() -> Result<()> {
-    /// let mut natpmp = Natpmp::new()?;
-    /// natpmp.send_public_address_request()?;
+    /// let mut n = Natpmp::new()?;
+    /// n.send_public_address_request()?;
     /// thread::sleep(Duration::from_millis(250));
-    /// let response = natpmp.read_response_or_retry()?;
+    /// let response = n.read_response_or_retry()?;
     /// # Ok(())
     /// # }
     ///
@@ -629,17 +633,17 @@ mod tests {
     fn test_natpmp() -> Result<()> {
         assert_eq!(Natpmp::new().is_ok(), true);
         let addr = "192.168.0.1".parse().unwrap();
-        let natpmp = Natpmp::new_with(addr)?;
-        assert_eq!(*natpmp.gateway(), addr);
+        let n = Natpmp::new_with(addr)?;
+        assert_eq!(*n.gateway(), addr);
         Ok(())
     }
 
     #[test]
     fn test_get_public_address() -> Result<()> {
-        let mut natpmp = Natpmp::new()?;
-        natpmp.send_public_address_request()?;
+        let mut n = Natpmp::new()?;
+        n.send_public_address_request()?;
         thread::sleep(Duration::from_millis(250));
-        let r = natpmp.read_response_or_retry()?;
+        let r = n.read_response_or_retry()?;
         match r {
             Response::Gateway(_) => {}
             _ => panic!("Not a gateway response"),
@@ -649,10 +653,10 @@ mod tests {
 
     #[test]
     fn test_tcp_mapping() -> Result<()> {
-        let mut natpmp = Natpmp::new()?;
-        natpmp.send_port_mapping_request(Protocol::TCP, 14020, 14020, 10)?;
+        let mut n = Natpmp::new()?;
+        n.send_port_mapping_request(Protocol::TCP, 14020, 14020, 10)?;
         thread::sleep(Duration::from_millis(250));
-        let r = natpmp.read_response_or_retry()?;
+        let r = n.read_response_or_retry()?;
         match r {
             Response::TCP(tr) => {
                 assert_eq!(tr.private_port(), 14020);
@@ -665,10 +669,10 @@ mod tests {
 
     #[test]
     fn test_udp_mapping() -> Result<()> {
-        let mut natpmp = Natpmp::new()?;
-        natpmp.send_port_mapping_request(Protocol::UDP, 14020, 14020, 10)?;
+        let mut n = Natpmp::new()?;
+        n.send_port_mapping_request(Protocol::UDP, 14020, 14020, 10)?;
         thread::sleep(Duration::from_millis(250));
-        let r = natpmp.read_response_or_retry()?;
+        let r = n.read_response_or_retry()?;
         match r {
             Response::UDP(ur) => {
                 assert_eq!(ur.private_port(), 14020);
@@ -681,14 +685,14 @@ mod tests {
 
     #[test]
     fn test_error() -> Result<()> {
-        let mut natpmp = Natpmp::new()?;
-        natpmp.send_port_mapping_request(Protocol::UDP, 14020, 14020, 30)?;
+        let mut n = Natpmp::new()?;
+        n.send_port_mapping_request(Protocol::UDP, 14020, 14020, 30)?;
         thread::sleep(Duration::from_millis(250));
-        natpmp.read_response_or_retry()?;
+        n.read_response_or_retry()?;
 
-        natpmp.send_port_mapping_request(Protocol::UDP, 14021, 14020, 10)?;
+        n.send_port_mapping_request(Protocol::UDP, 14021, 14020, 10)?;
         thread::sleep(Duration::from_millis(250));
-        match natpmp.read_response_or_retry() {
+        match n.read_response_or_retry() {
             Ok(r) => {
                 if let Response::UDP(ur) = r {
                     assert_ne!(ur.public_port(), 14020);
