@@ -1,4 +1,4 @@
 #include <errno.h>
 
-const errno_t RS_EWOULDBLOCK = EWOULDBLOCK;
-const errno_t RS_ECONNREFUSED = ECONNREFUSED;
+const int RS_EWOULDBLOCK = EWOULDBLOCK;
+const int RS_ECONNREFUSED = ECONNREFUSED;
