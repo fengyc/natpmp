@@ -3,11 +3,12 @@ os:
   - linux
   - osx
 language: rust
+cache: cargo
 script:
-- cargo build --verbose --all
-- cargo test --verbose test::test_ffi
-- cargo test --verbose test::test_natpmp
-- cargo doc
+  - cargo build --verbose --all
+  - cargo test --verbose test::test_ffi
+  - cargo test --verbose test::test_natpmp
+  - cargo doc
 stages:
   - name: deploy
     if: os = linux
