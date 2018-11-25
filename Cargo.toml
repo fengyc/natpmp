@@ -1,6 +1,6 @@
 [package]
 name = "natpmp"
-version = "0.1.11"
+version = "0.1.12"
 authors = ["fengyingcai <fengyc.work@gmail.com>"]
 readme = "README.md"
 license = "MIT"
