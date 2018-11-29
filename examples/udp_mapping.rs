@@ -1,8 +1,8 @@
 extern crate natpmp;
 
+use natpmp::*;
 use std::thread;
 use std::time::Duration;
-use natpmp::*;
 
 fn main() -> Result<()> {
     let mut n = Natpmp::new()?;
@@ -10,12 +10,10 @@ fn main() -> Result<()> {
     // sleep for a while
     thread::sleep(Duration::from_millis(100));
     match n.read_response_or_retry() {
-        Err(e) => {
-            match e {
-                Error::NATPMP_TRYAGAIN => println!("Try again later"),
-                _ => return Err(e)
-            }
-        }
+        Err(e) => match e {
+            Error::NATPMP_TRYAGAIN => println!("Try again later"),
+            _ => return Err(e),
+        },
         Ok(Response::UDP(ur)) => {
             assert_eq!(ur.private_port(), 4020);
             assert_eq!(ur.public_port(), 4020); // Could be another port chosen by gateway
