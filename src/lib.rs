@@ -11,8 +11,8 @@ use std::time::{Duration, Instant};
 mod error;
 mod ffi;
 
-pub use error::*;
-use ffi::*;
+pub use crate::error::*;
+use crate::ffi::*;
 
 /// NAT-PMP mini wait milli-seconds
 const NATPMP_MIN_WAIT: u64 = 250;
@@ -480,7 +480,7 @@ impl Natpmp {
         if let Err(e) = result {
             match e {
                 Error::NATPMP_TRYAGAIN => {
-                    let mut now = Instant::now();
+                    let now = Instant::now();
                     // time to retry or not
                     if now >= self.retry_time {
                         if self.try_number >= NATPMP_MAX_ATTEMPS {

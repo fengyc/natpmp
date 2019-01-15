@@ -7,6 +7,11 @@ NAT-PMP client library in rust, a rust implementation of the c library libnatpmp
 
 *Note*: `src/getgateway.h` and `src/getgateway.c` are from [https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp) .
 
+Versions
+--------
+
+Version 0.2.x supports rust 2018 edition.
+
 Example
 -------
 
