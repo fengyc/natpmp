@@ -7,8 +7,7 @@ stages:
   - name: install
     if: os = windows
 install:
-  - rustup toolchain install stable
-  - rustup default stable
+  - if [ $TRAVIS_OS_NAME = windows ]; then rustup toolchain install stable-msvc && rustup default stable-msvc; fi
 script:
   - cargo build --verbose --all
   - cargo test --verbose test::test_ffi
