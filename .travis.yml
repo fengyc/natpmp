@@ -7,8 +7,8 @@ stages:
   - name: install
     if: os = windows
 install:
-  - rustup toolchain install stable-msvc
-  - rustup default stable-msvc
+  - rustup toolchain install stable
+  - rustup default stable
 script:
   - cargo build --verbose --all
   - cargo test --verbose test::test_ffi
