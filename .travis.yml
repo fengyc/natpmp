@@ -3,6 +3,8 @@ os:
   - osx
   - windows
 language: rust
+install:
+  - if [ $TRAVIS_OS_NAME = windows ]; then rustup toolchain install stable-msvc && rustup default stable-msvc; fi
 script:
   - cargo build --verbose --all
   - cargo test --verbose test::test_ffi
