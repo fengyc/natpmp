@@ -1,7 +1,9 @@
 natpmp
 ======
 
-[![Build Status](https://travis-ci.org/fengyc/natpmp.svg?branch=master)](https://travis-ci.org/fengyc/natpmp)
+[![Main](https://github.com/fengyc/natpmp/actions/workflows/main.yml/badge.svg)](https://github.com/fengyc/natpmp/actions/workflows/main.yml)
+
+[![Nightly](https://github.com/fengyc/natpmp/actions/workflows/nightly.yml/badge.svg)](https://github.com/fengyc/natpmp/actions/workflows/nightly.yml)
 
 NAT-PMP client library in rust, a rust implementation of the c library libnatpmp([https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp)).
 
