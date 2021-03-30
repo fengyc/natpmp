@@ -31,7 +31,11 @@ jobs:
           toolchain: stable
 
       # Rust cargo
-      - run: cargo build --release
+      - run: |
+          cargo build --verbose --all
+          cargo test --verbose test::test_ffi
+          cargo test --verbose test::test_natpmp
+          cargo doc --verbose
 
       # Draft Release
       - uses: "marvinpinto/action-automatic-releases@latest"

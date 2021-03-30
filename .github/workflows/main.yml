@@ -36,6 +36,14 @@ jobs:
           cargo test --verbose test::test_natpmp
           cargo doc --verbose
 
+      # Latest build
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          draft: true
+          title: "Development Build"
+
   build-windows:
     runs-on: windows-latest
     steps:
