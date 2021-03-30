@@ -11,6 +11,9 @@ use std::time::{Duration, Instant};
 mod error;
 mod ffi;
 
+#[cfg(feature = "tokio")]
+mod asynchronous;
+
 pub use crate::error::*;
 use crate::ffi::*;
 
@@ -410,7 +413,7 @@ impl Natpmp {
                 }
                 // epoch
                 let epoch = u32::from_be(convert_to(&buf[4..8]));
-
+                // result
                 let rsp_type = buf[1] & 0x7f;
                 return Ok(match rsp_type {
                     0 => Response::Gateway(GatewayResponse {

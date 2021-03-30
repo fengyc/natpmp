@@ -1,6 +1,6 @@
 [package]
 name = "natpmp"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["fengyingcai <fengyc.work@gmail.com>"]
 description = "NAT-PMP client library"
 homepage = "https://github.com/fengyc/natpmp"
@@ -14,7 +14,14 @@ build = "build.rs"
 edition = "2018"
 
 [badges]
-travis-ci = { repository = "fengyc/natpmp" }
+maintenance = { status = "actively-developed" }
+
+[features]
+default = ["async"]
+async = ["tokio"]
 
 [build-dependencies]
-cc = "1.0"      # compile native c
+cc = "1"      # compile native c
+
+[dependencies]
+tokio = {version = "1", features=["net"], optional = true}
