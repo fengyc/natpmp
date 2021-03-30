@@ -1,5 +1,5 @@
 # Hourly build, cache not allowed
-name: Nightly build on master
+name: Nightly build
 
 on:
   schedule:
