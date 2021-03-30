@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  build-all:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -30,4 +30,70 @@ jobs:
           toolchain: stable
 
       # Rust cargo
-      - run: cargo build --release
+      - run: |
+          cargo build --verbose --all
+          cargo test --verbose test::test_ffi
+          cargo test --verbose test::test_natpmp
+          cargo doc --verbose
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Rust cache
+      - name: Rust cargo cache
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-rust-cargo
+        with:
+          path: |
+            ~/.cargo
+            target
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      # Rust toolchain
+      - name: Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      # Rust cargo
+      - run: |
+          cargo build --verbose --all
+          cargo test --verbose test::test_ffi
+          cargo test --verbose test::test_natpmp
+          cargo doc --verbose
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Rust cache
+      - name: Rust cargo cache
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-rust-cargo
+        with:
+          path: |
+            ~/.cargo
+            target
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      # Rust toolchain
+      - name: Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      # Rust cargo
+      - run: |
+          cargo build --verbose --all
+          cargo test --verbose test::test_ffi
+          cargo test --verbose test::test_natpmp
+          cargo doc --verbose
