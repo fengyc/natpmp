@@ -1,35 +1,48 @@
+use std::io;
 use std::net::{Ipv4Addr, SocketAddrV4};
+use std::time::Duration;
 
-use tokio::net::UdpSocket;
+use async_trait::async_trait;
 
 use crate::{
     convert_to, get_default_gateway, Error, GatewayResponse, MappingResponse, Protocol, Response,
     Result, NATPMP_MAX_ATTEMPS, NATPMP_PORT,
 };
-use std::time::Duration;
+
+/// A wrapper trait for async udpsocket.
+#[async_trait]
+pub trait AsyncUdpSocket {
+    async fn connect(&self, addr: &str) -> io::Result<()>;
+
+    async fn send(&self, buf: &[u8]) -> io::Result<usize>;
+
+    async fn recv(&self, buf: &mut [u8]) -> io::Result<usize>;
+}
 
 /// NAT-PMP async client
-pub struct NatpmpAsync {
-    s: UdpSocket,
+pub struct NatpmpAsync<S>
+where
+    S: AsyncUdpSocket,
+{
+    s: S,
     gateway: Ipv4Addr,
 }
 
-impl NatpmpAsync {
-    pub async fn new() -> Result<NatpmpAsync> {
-        let gateway = get_default_gateway()?;
-        NatpmpAsync::new_with(gateway).await
-    }
+/// Create a NAT-PMP object with async udpsocket and gateway
+pub fn new_natpmp_async_with<S>(s: S, gateway: Ipv4Addr) -> NatpmpAsync<S>
+where
+    S: AsyncUdpSocket,
+{
+    NatpmpAsync { s, gateway }
+}
 
-    pub async fn new_with(gateway: Ipv4Addr) -> Result<NatpmpAsync> {
-        let s = UdpSocket::bind("0.0.0.0:0")
-            .await
-            .map_err(|e| Error::NATPMP_ERR_SOCKETERROR)?;
-        let gateway_sockaddr = SocketAddrV4::new(gateway, NATPMP_PORT);
-        if s.connect(gateway_sockaddr).await.is_err() {
-            return Err(Error::NATPMP_ERR_CONNECTERR);
-        }
-        let n = NatpmpAsync { s, gateway };
-        Ok(n)
+impl<S> NatpmpAsync<S>
+where
+    S: AsyncUdpSocket,
+{
+    /// NAT-PMP gateway address.
+    pub fn gateway(&self) -> &Ipv4Addr {
+        &self.gateway
     }
 
     pub async fn send_public_address_request(&mut self) -> Result<()> {

@@ -8,11 +8,15 @@ use std::ops::Add;
 use std::result;
 use std::time::{Duration, Instant};
 
+mod asynchronous;
 mod error;
 mod ffi;
 
 #[cfg(feature = "tokio")]
-mod asynchronous;
+mod a_tokio;
+
+#[cfg(feature = "async-std")]
+mod a_std;
 
 pub use crate::error::*;
 use crate::ffi::*;

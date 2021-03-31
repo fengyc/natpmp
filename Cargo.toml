@@ -17,11 +17,13 @@ edition = "2018"
 maintenance = { status = "actively-developed" }
 
 [features]
-default = ["async"]
-async = ["tokio"]
+default = ["tokio"]
+all = ["tokio", "async-std"]
 
 [build-dependencies]
 cc = "1"      # compile native c
 
 [dependencies]
-tokio = {version = "1", features=["net"], optional = true}
+async-trait = "0.1"
+tokio = { version = "1", features = ["net"], optional = true }
+async-std = { version = "1", optional = true }
