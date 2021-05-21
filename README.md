@@ -14,6 +14,8 @@ Versions
 
 Version 0.2.x supports rust 2018 edition.
 
+Version 0.3.x supports tokio and async-std.
+
 Example
 -------
 
@@ -53,6 +55,19 @@ Check response type and and result:
         Response::UDP(ur) => {}
         Response::TCP(tr) => {}
     }
+
+Async
+------
+
+Enable feature `tokio` or `async-std` in Cargo.toml (default feature `tokio`).
+
+    [dependencies]
+    natpmp = { version = "0.3", features = ["tokio"] }
+
+Or
+
+    [dependencies]
+    natpmp = { version = "0.3", features = ["async-std"] }
 
 License
 -------
