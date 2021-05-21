@@ -13,10 +13,10 @@ mod error;
 mod ffi;
 
 #[cfg(feature = "tokio")]
-mod a_tokio;
+pub mod a_tokio;
 
 #[cfg(feature = "async-std")]
-mod a_std;
+pub mod a_std;
 
 pub use crate::error::*;
 use crate::ffi::*;
