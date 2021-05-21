@@ -13,13 +13,18 @@ mod error;
 mod ffi;
 
 #[cfg(feature = "tokio")]
-pub mod a_tokio;
+mod a_tokio;
+#[cfg(feature = "tokio")]
+pub use a_tokio::*;
 
 #[cfg(feature = "async-std")]
-pub mod a_std;
+mod a_std;
+#[cfg(feature = "async-std")]
+pub use a_std::*;
 
 pub use crate::error::*;
 use crate::ffi::*;
+pub use asynchronous::*;
 
 /// NAT-PMP mini wait milli-seconds
 const NATPMP_MIN_WAIT: u64 = 250;

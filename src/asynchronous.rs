@@ -1,12 +1,12 @@
 use std::io;
-use std::net::{Ipv4Addr, SocketAddrV4};
+use std::net::Ipv4Addr;
 use std::time::Duration;
 
 use async_trait::async_trait;
 
 use crate::{
-    convert_to, get_default_gateway, Error, GatewayResponse, MappingResponse, Protocol, Response,
-    Result, NATPMP_MAX_ATTEMPS, NATPMP_PORT,
+    convert_to, Error, GatewayResponse, MappingResponse, Protocol, Response, Result,
+    NATPMP_MAX_ATTEMPS,
 };
 
 /// A wrapper trait for async udpsocket.
@@ -45,21 +45,45 @@ where
         &self.gateway
     }
 
+    /// Send public address request.
+    ///
+    /// # Errors
+    /// * [`Error::NATPMP_ERR_SENDERR`](enum.Error.html#variant.NATPMP_ERR_SENDERR)
+    ///
+    /// # Examples
+    /// ```
+    /// use natpmp::*;
+    ///
+    /// let mut n = new_tokio_natpmp().await?;
+    /// n.send_public_address_request().await?;
+    /// ```
     pub async fn send_public_address_request(&mut self) -> Result<()> {
-        let mut request = [0_u8; 2];
+        let request = [0_u8; 2];
         let n = self
             .s
             .send(&request[..])
             .await
-            .map_err(|e| Error::NATPMP_ERR_NETWORKFAILURE)?;
+            .map_err(|_| Error::NATPMP_ERR_SENDERR)?;
         if n != request.len() {
-            return Err(Error::NATPMP_ERR_NETWORKFAILURE);
+            return Err(Error::NATPMP_ERR_SENDERR);
         }
         Ok(())
     }
 
+    /// Send port mapping request.
+    ///
+    /// # Errors
+    /// * [`Error::NATPMP_ERR_SENDERR`](enum.Error.html#variant.NATPMP_ERR_SENDERR)
+    ///
+    /// # Examples
+    /// ```
+    /// use natpmp::*;
+    ///
+    /// let mut n = new_tokio_natpmp().await?;
+    /// n.send_port_mapping_request(Protocol::UDP, 4020, 4020, 30).await?;
+    /// ```
     pub async fn send_port_mapping_request(
-        &mut self,
+        &self,
         protocol: Protocol,
         private_port: u16,
         public_port: u16,
@@ -71,8 +95,8 @@ where
             _ => 2,
         };
         request[2] = 0; // reserved
-        request[3] = 0; // reserved
-                        // private port
+        request[3] = 0;
+        // private port
         request[4] = (private_port >> 8 & 0xff) as u8;
         request[5] = (private_port & 0xff) as u8;
         // public port
@@ -88,20 +112,46 @@ where
             .s
             .send(&request[..])
             .await
-            .map_err(|e| Error::NATPMP_ERR_NETWORKFAILURE)?;
+            .map_err(|_| Error::NATPMP_ERR_SENDERR)?;
         if n != request.len() {
-            return Err(Error::NATPMP_ERR_NETWORKFAILURE);
+            return Err(Error::NATPMP_ERR_SENDERR);
         }
         Ok(())
     }
 
+    /// Read NAT-PMP response if possible
+    ///
+    /// # Errors
+    /// * [`Error::NATPMP_TRYAGAIN`](enum.Error.html#variant.NATPMP_TRYAGAIN)
+    /// * [`Error::NATPMP_ERR_NOPENDINGREQ`](enum.Error.html#variant.NATPMP_ERR_NOPENDINGREQ)
+    /// * [`Error::NATPMP_ERR_NOGATEWAYSUPPORT`](enum.Error.html#variant.NATPMP_ERR_NOGATEWAYSUPPORT)
+    /// * [`Error::NATPMP_ERR_RECVFROM`](enum.Error.html#variant.NATPMP_ERR_RECVFROM)
+    /// * [`Error::NATPMP_ERR_WRONGPACKETSOURCE`](enum.Error.html#variant.NATPMP_ERR_WRONGPACKETSOURCE)
+    /// * [`Error::NATPMP_ERR_UNSUPPORTEDVERSION`](enum.Error.html#variant.NATPMP_ERR_UNSUPPORTEDVERSION)
+    /// * [`Error::NATPMP_ERR_UNSUPPORTEDOPCODE`](enum.Error.html#variant.NATPMP_ERR_UNSUPPORTEDOPCODE)
+    /// * [`Error::NATPMP_ERR_UNSUPPORTEDVERSION`](enum.Error.html#variant.NATPMP_ERR_UNSUPPORTEDVERSION)
+    /// * [`Error::NATPMP_ERR_NOTAUTHORIZED`](enum.Error.html#variant.NATPMP_ERR_NOTAUTHORIZED)
+    /// * [`Error::NATPMP_ERR_NETWORKFAILURE`](enum.Error.html#variant.NATPMP_ERR_NETWORKFAILURE)
+    /// * [`Error::NATPMP_ERR_OUTOFRESOURCES`](enum.Error.html#variant.NATPMP_ERR_OUTOFRESOURCES)
+    /// * [`Error::NATPMP_ERR_UNSUPPORTEDOPCODE`](enum.Error.html#variant.NATPMP_ERR_OUTOFRESOURCES)
+    /// * [`Error::NATPMP_ERR_UNDEFINEDERROR`](enum.Error.html#variant.NATPMP_ERR_UNDEFINEDERROR)
+    ///
+    /// # Examples
+    /// ```
+    /// use natpmp::*;
+    ///
+    /// let mut n = new_tokio_natpmp().await?;
+    /// n.send_public_address_request().await?;
+    /// let response = n.read_response_or_retry().await?;
+    ///
+    /// ```
     pub async fn read_response_or_retry(&self) -> Result<Response> {
         let mut buf = [0_u8; 16];
         let mut retries = 0;
         while retries < NATPMP_MAX_ATTEMPS {
             match self.s.recv(&mut buf).await {
                 Err(_) => retries += 1,
-                Ok(n) => {
+                Ok(_) => {
                     // version
                     if buf[0] != 0 {
                         return Err(Error::NATPMP_ERR_UNSUPPORTEDVERSION);

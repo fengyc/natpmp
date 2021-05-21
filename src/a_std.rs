@@ -1,5 +1,5 @@
-use std::net::{Ipv4Addr, SocketAddrV4};
 use std::io;
+use std::net::{Ipv4Addr, SocketAddrV4};
 
 use async_std::net::UdpSocket;
 use async_trait::async_trait;
@@ -22,11 +22,36 @@ impl AsyncUdpSocket for UdpSocket {
     }
 }
 
+/// Create a async-std NAT-PMP object with default gateway
+///
+/// # Errors
+/// * [`Error::NATPMP_ERR_SOCKETERROR`](enum.Error.html#variant.NATPMP_ERR_SOCKETERROR)
+/// * [`Error::NATPMP_ERR_CONNECTERR`](enum.Error.html#variant.NATPMP_ERR_CONNECTERR)
+///
+/// # Examples
+/// ```
+/// use natpmp::*;
+///
+/// let n = new_async_std_natpmp().await?;
+/// ```
 pub async fn new_async_std_natpmp() -> Result<NatpmpAsync<UdpSocket>> {
     let gateway = get_default_gateway()?;
     new_async_std_natpmp_with(gateway).await
 }
 
+/// Create a tokio NAT-PMP object with default gateway
+///
+/// # Errors
+/// * [`Error::NATPMP_ERR_SOCKETERROR`](enum.Error.html#variant.NATPMP_ERR_SOCKETERROR)
+/// * [`Error::NATPMP_ERR_CONNECTERR`](enum.Error.html#variant.NATPMP_ERR_CONNECTERR)
+///
+/// # Examples
+/// ```
+/// use natpmp::*;
+///
+/// let gateway = get_default_gateway().unwrap();
+/// let n = new_async_std_natpmp_with(gateway).await?;
+/// ```
 pub async fn new_async_std_natpmp_with(gateway: Ipv4Addr) -> Result<NatpmpAsync<UdpSocket>> {
     let s = UdpSocket::bind("0.0.0.0:0")
         .await
