@@ -1,4 +1,4 @@
-name: "Pre Release"
+name: "Release"
 
 on:
   push:
@@ -37,9 +37,17 @@ jobs:
           cargo test --verbose test::test_natpmp
           cargo doc --verbose
 
-      # Draft Release
+      # Release
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          draft: true
+          prerelease: false
+          draft: false
+
+      # Cargo publish
+      - name: Cargo publish
+        env:
+          CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}
+        run: |
+          cargo publish --token "$CARGO_TOKEN"
+
