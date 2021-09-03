@@ -55,7 +55,7 @@ pub async fn new_async_std_natpmp() -> Result<NatpmpAsync<UdpSocket>> {
 pub async fn new_async_std_natpmp_with(gateway: Ipv4Addr) -> Result<NatpmpAsync<UdpSocket>> {
     let s = UdpSocket::bind("0.0.0.0:0")
         .await
-        .map_err(|e| Error::NATPMP_ERR_SOCKETERROR)?;
+        .map_err(|_e| Error::NATPMP_ERR_SOCKETERROR)?;
     let gateway_sockaddr = SocketAddrV4::new(gateway, NATPMP_PORT);
     if s.connect(gateway_sockaddr).await.is_err() {
         return Err(Error::NATPMP_ERR_CONNECTERR);
