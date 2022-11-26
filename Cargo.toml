@@ -1,6 +1,6 @@
 [package]
 name = "natpmp"
-version = "0.3.3"
+version = "0.4.0"
 authors = ["fengyingcai <fengyc.work@gmail.com>"]
 description = "NAT-PMP client library"
 homepage = "https://github.com/fengyc/natpmp"
