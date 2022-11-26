@@ -13,7 +13,7 @@ Versions
 
 Version 0.2.x supports rust 2018 edition.
 
-Version 0.3.x supports tokio and async-std.
+Version 0.3.x+ supports tokio and async-std.
 
 Example
 -------
