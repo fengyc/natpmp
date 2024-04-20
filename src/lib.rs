@@ -3,6 +3,7 @@
 //! `natpmp` is a NAT-PMP [IETF RFC 6886](https://tools.ietf.org/html/rfc6886) client library in rust.
 //! It is a rust implementation of the c library [natpmp](https://github.com/miniupnp/natpmp).
 
+use std::io;
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4, UdpSocket};
 use std::ops::Add;
 use std::result;
@@ -373,15 +374,9 @@ impl Natpmp {
     fn read_response(&self) -> Result<Response> {
         let mut buf = [0u8; 16];
         match self.s.recv_from(&mut buf) {
-            Err(e) => match e.raw_os_error() {
-                Some(code) => {
-                    if code == unsafe { RS_EWOULDBLOCK } {
-                        return Err(Error::NATPMP_TRYAGAIN);
-                    }
-                    if code == unsafe { RS_ECONNREFUSED } {
-                        return Err(Error::NATPMP_ERR_NOGATEWAYSUPPORT);
-                    }
-                }
+            Err(e) => match e.kind() {
+                io::ErrorKind::WouldBlock => return Err(Error::NATPMP_TRYAGAIN),
+                io::ErrorKind::ConnectionRefused => return Err(Error::NATPMP_ERR_NOGATEWAYSUPPORT),
                 _ => {
                     return Err(Error::NATPMP_ERR_RECVFROM);
                 }
@@ -444,7 +439,6 @@ impl Natpmp {
                 });
             }
         }
-        Err(Error::NATPMP_ERR_RECVFROM)
     }
 
     /// Read NAT-PMP response if possible
@@ -517,8 +511,6 @@ mod tests {
     #[test]
     fn test_ffi() {
         assert!(get_default_gateway().is_ok());
-        assert_ne!(0, unsafe { RS_EWOULDBLOCK });
-        assert_ne!(0, unsafe { RS_ECONNREFUSED });
     }
 
     #[test]
