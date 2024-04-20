@@ -494,7 +494,7 @@ impl Natpmp {
                             return Err(Error::NATPMP_ERR_NOGATEWAYSUPPORT);
                         }
                         // double dealy
-                        let delay = (NATPMP_MIN_WAIT * (1 << self.try_number)) as u64; // ms
+                        let delay = NATPMP_MIN_WAIT * (1 << self.try_number); // ms
                         self.retry_time = self.retry_time.add(Duration::from_millis(delay)); // next time
                         self.try_number += 1;
                         self.send_pending_request()?;
@@ -516,14 +516,14 @@ mod tests {
 
     #[test]
     fn test_ffi() {
-        assert_eq!(true, get_default_gateway().is_ok());
+        assert!(get_default_gateway().is_ok());
         assert_ne!(0, unsafe { RS_EWOULDBLOCK });
         assert_ne!(0, unsafe { RS_ECONNREFUSED });
     }
 
     #[test]
     fn test_natpmp() -> Result<()> {
-        assert_eq!(Natpmp::new().is_ok(), true);
+        assert!(Natpmp::new().is_ok());
         let addr = "192.168.0.1".parse().unwrap();
         let n = Natpmp::new_with(addr)?;
         assert_eq!(*n.gateway(), addr);
@@ -585,13 +585,10 @@ mod tests {
         n.send_port_mapping_request(Protocol::UDP, 14021, 14020, 10)?;
         thread::sleep(Duration::from_millis(250));
         match n.read_response_or_retry() {
-            Ok(r) => {
-                if let Response::UDP(ur) = r {
-                    assert_ne!(ur.public_port(), 14020);
-                } else {
-                    panic!("Not a udp mapping response!");
-                }
+            Ok(Response::UDP(ur)) => {
+                assert_ne!(ur.public_port(), 14020);
             }
+            Ok(_) => panic!("Not a udp mapping response!"),
             Err(_) => {}
         }
         Ok(())
