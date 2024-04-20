@@ -60,13 +60,6 @@ pub fn get_default_gateway() -> Result<Ipv4Addr> {
     Err(Error::NATPMP_ERR_CANNOTGETGATEWAY)
 }
 
-fn convert_to<T: Clone>(bytes: &[u8]) -> T {
-    unsafe {
-        let ptr = bytes.as_ptr();
-        (*(ptr as *const T)).clone()
-    }
-}
-
 /// NAT-PMP mapping protocol.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub enum Protocol {
@@ -409,7 +402,7 @@ impl Natpmp {
                     return Err(Error::NATPMP_ERR_UNSUPPORTEDOPCODE);
                 }
                 // result code
-                let resultcode = u16::from_be(convert_to(&buf[2..4]));
+                let resultcode = u16::from_be_bytes([buf[2], buf[3]]);
                 if resultcode != 0 {
                     return Err(match resultcode {
                         1 => Error::NATPMP_ERR_UNSUPPORTEDVERSION,
@@ -421,19 +414,21 @@ impl Natpmp {
                     });
                 }
                 // epoch
-                let epoch = u32::from_be(convert_to(&buf[4..8]));
+                let epoch = u32::from_be_bytes([buf[4], buf[5], buf[6], buf[7]]);
                 // result
                 let rsp_type = buf[1] & 0x7f;
                 return Ok(match rsp_type {
                     0 => Response::Gateway(GatewayResponse {
                         epoch,
-                        public_address: Ipv4Addr::from(u32::from_be(convert_to(&buf[8..12]))),
+                        public_address: Ipv4Addr::from(u32::from_be_bytes([
+                            buf[8], buf[9], buf[10], buf[11],
+                        ])),
                     }),
                     _ => {
-                        let private_port = u16::from_be(convert_to(&buf[8..10]));
-                        let public_port = u16::from_be(convert_to(&buf[10..12]));
-                        let lifetime = u32::from_be(convert_to(&buf[12..16]));
-                        let lifetime = Duration::from_secs(u64::from(lifetime));
+                        let private_port = u16::from_be_bytes([buf[8], buf[9]]);
+                        let public_port = u16::from_be_bytes([buf[10], buf[11]]);
+                        let lifetime = u32::from_be_bytes([buf[12], buf[13], buf[14], buf[15]]);
+                        let lifetime = Duration::from_secs(lifetime.into());
                         let m = MappingResponse {
                             epoch,
                             private_port,
