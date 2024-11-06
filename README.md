@@ -6,8 +6,6 @@ natpmp
 
 NAT-PMP client library in rust, a rust implementation of the c library libnatpmp([https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp)).
 
-*Note*: `src/getgateway.h` and `src/getgateway.c` are from [https://github.com/miniupnp/libnatpmp](https://github.com/miniupnp/libnatpmp) .
-
 Versions
 --------
 
@@ -60,13 +58,11 @@ Async
 
 Enable feature `tokio` or `async-std` in Cargo.toml (default feature `tokio`).
 
-    [dependencies]
-    natpmp = { version = "0.3", features = ["tokio"] }
+    cargo add natpmp --features tokio
 
 Or
 
-    [dependencies]
-    natpmp = { version = "0.3", features = ["async-std"] }
+    cargo add natpmp --features async-std
 
 License
 -------
