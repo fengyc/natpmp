@@ -9,9 +9,10 @@ use std::ops::Add;
 use std::result;
 use std::time::{Duration, Instant};
 
+use netdev;
+
 mod asynchronous;
 mod error;
-mod ffi;
 
 #[cfg(feature = "tokio")]
 mod a_tokio;
@@ -24,7 +25,6 @@ mod a_std;
 pub use a_std::*;
 
 pub use crate::error::*;
-use crate::ffi::*;
 pub use asynchronous::*;
 
 /// NAT-PMP mini wait milli-seconds
@@ -52,11 +52,10 @@ pub type Result<T> = result::Result<T, Error>;
 /// assert_eq!(r.is_ok(), true);
 /// ```
 pub fn get_default_gateway() -> Result<Ipv4Addr> {
-    let mut addr: u32 = 0;
-    let result: i32 = unsafe { getdefaultgateway(&mut addr) };
-    if result == 0 {
-        addr = u32::from_be(addr); // to native order
-        return Ok(Ipv4Addr::from(addr));
+    if let Ok(ipv4_addrs) = netdev::get_default_gateway().map(|g| g.ipv4) {
+        if let Some(gw) = ipv4_addrs.get(0) {
+            return Ok(gw.clone());
+        }
     }
     Err(Error::NATPMP_ERR_CANNOTGETGATEWAY)
 }
@@ -569,7 +568,7 @@ mod tests {
 
     #[test]
     fn test_error() -> Result<()> {
-        let mut n = Natpmp::new()?;
+        let mut n: Natpmp = Natpmp::new()?;
         n.send_port_mapping_request(Protocol::UDP, 14020, 14020, 30)?;
         thread::sleep(Duration::from_millis(250));
         n.read_response_or_retry()?;
