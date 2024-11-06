@@ -11,14 +11,37 @@ keywords = ["natpmp", "rfc6886", "nat", "portmapping"]
 categories = ["network-programming"]
 license = "MIT"
 build = "build.rs"
-edition = "2018"
+edition = "2021"
 
 [badges]
 maintenance = { status = "actively-developed" }
 
+[[example]]
+name = "tcp-mapping"
+path = "examples/tcp_mapping.rs"
+
+[[example]]
+name = "udp-mapping"
+path = "examples/udp_mapping.rs"
+
+[[example]]
+name = "async-udp-tokio"
+path = "examples/async_udp_tokio.rs"
+required-features = ["tokio"]
+
+[[example]]
+name = "async-udp-async-std"
+path = "examples/async_udp_asyncstd.rs"
+required-features = ["async-std"]
+
+
 [features]
 default = ["tokio"]
+
 all = ["tokio", "async-std"]
+
+tokio = ["dep:tokio"]
+async-std = ["dep:async-std"]
 
 [build-dependencies]
 cc = "1"      # compile native c

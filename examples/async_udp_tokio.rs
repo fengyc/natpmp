@@ -3,7 +3,6 @@ use std::sync::Arc;
 use natpmp::*;
 use std::time::Duration;
 
-#[cfg(feature = "tokio")]
 #[tokio::main]
 async fn main() -> Result<()> {
     let n = Arc::new(new_tokio_natpmp().await?);

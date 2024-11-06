@@ -3,7 +3,6 @@ use std::sync::Arc;
 use natpmp::*;
 use std::time::Duration;
 
-#[cfg(feature = "async-std")]
 fn main() -> Result<()> {
     use async_std::future;
     use async_std::task;
